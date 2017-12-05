@@ -10,6 +10,7 @@ var neutralButton = document.getElementById("neutralbutton");
 
 var rightEyeClicked = false;
 var leftEyeClicked = false;
+var noseClicked = false;
 
 happyButton.addEventListener('click', drawHappy);
 sadButton.addEventListener('click', drawSad);
@@ -50,6 +51,9 @@ function drawFace() {
 		context.fill();
 	context.stroke();
 
+}
+
+function drawNose () {
 	context.beginPath();
 		context.moveTo(200,195);
 		context.lineTo(187,224);
@@ -61,6 +65,7 @@ function drawHappy () {
 	//happy face
 	clearCanvas();
 	drawFace();
+	drawNose();
 	context.beginPath();
 		context.moveTo(287,268);
 		context.arc(200,220,100,0.5,2.65,false);
@@ -71,6 +76,7 @@ function drawSad () {
 	//sad face
 	clearCanvas();
 	drawFace();
+	drawNose();
 	context.beginPath();
 		context.moveTo(120,310);
 		context.arc(200,360,95,3.7,5.7,false);
@@ -81,6 +87,7 @@ function drawSurprised () {
 	//surprised face
 	clearCanvas();
 	drawFace();
+	drawNose();
 	context.beginPath();
 		context.moveTo(230,290);
 		context.arc(200,290,30,0,Math.PI*2,true);
@@ -91,6 +98,7 @@ function drawNeutral () {
 	//neutral face
 	clearCanvas();
 	drawFace();
+	drawNose();
 	context.beginPath();
 		context.moveTo(120,270);
 		context.lineTo(280,270);
@@ -137,7 +145,6 @@ function drawLeftTear () {
 	leftEyeClicked = !(leftEyeClicked);
 }
 
-
 function getMouseXY(e) { //Steves stuff
 	var boundingRect = canvas.getBoundingClientRect();
 	var offsetX = boundingRect.left;
@@ -152,6 +159,31 @@ function getMouseXY(e) { //Steves stuff
 	return {x: mx, y: my}; // return as an object
 }
 
+/*function followNose(x,y) {
+	noseClicked = true;
+	while (noseClicked == true) {
+		clearCanvas();
+		drawFace();
+		context.beginPath();
+			context.moveTo(x,y-20); //200,195
+			context.lineTo(x-13,y+29); //224
+			context.lineTo(x,y+29);
+		context.stroke();
+		position = getMouseXY(evt);
+		x=position.x;
+		y=position.y;
+		noseClicked = false;
+		//checkNoseClicked();
+	}
+}*/
+
+function followNose() {
+	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)) {
+
+	}
+
+}
+
 function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
 	console.log(position);
@@ -160,7 +192,7 @@ function callingStuffToDo (evt) {
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175))
 			drawLeftTear();
 	//if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
-		//	followNose();
+			//followNose();
 }
 
 //Main calling of functions
