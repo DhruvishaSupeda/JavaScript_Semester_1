@@ -11,13 +11,19 @@ var neutralButton = document.getElementById("neutralbutton");
 var rightEyeClicked = false;
 var leftEyeClicked = false;
 var noseClicked = false;
+var rightTearsShown = false;
+var leftTearsShown = false;
 
-happyButton.addEventListener('click', drawHappy);
-sadButton.addEventListener('click', drawSad);
-surprisedButton.addEventListener('click', drawSurprised);
-neutralButton.addEventListener('click', drawNeutral);
-canvas.addEventListener('click', callingStuffToDo);
-canvas.addEventListener('mouseover', drawMoustache);
+var red = 0;
+var green = 0;
+var blue = 0;
+
+happyButton.addEventListener("click", drawHappy);
+sadButton.addEventListener("click", drawSad);
+surprisedButton.addEventListener("click", drawSurprised);
+neutralButton.addEventListener("click", drawNeutral);
+canvas.addEventListener("click", callingStuffToDo);
+canvas.addEventListener("mousemove", drawMoustache);
 
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
@@ -49,18 +55,6 @@ function drawFace() {
 	context.beginPath();
 		context.moveTo(252,150);
 		context.arc(245,150,7,0,Math.PI*2,true);
-		context.fill();
-	context.stroke();
-}
-
-function drawMoustache() {
-
-	context.beginPath();
-		context.moveTo(147,256);
-		//context.arc(200,360,95,3.7,5.7,false);
-		//context.arcTo(200,250,400,300,20);
-		context.arc(200,340,100,Math.PI+1,5.28,false);
-		context.closePath();
 		context.fill();
 	context.stroke();
 }
@@ -121,10 +115,12 @@ function drawRightTear () {
 	if (rightEyeClicked == false) {
 		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
+		rightTearsShown = true;
 	}
 	else{
 		context.lineWidth = "3";
 		context.strokeStyle = "rgb(255,255,255)";
+		rightTearsShown = false;
 	}
 	context.beginPath();
 		context.moveTo(225,180);
@@ -141,10 +137,12 @@ function drawLeftTear () {
 	if (leftEyeClicked == false){
 		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
+		leftTearsShown = true;
 	}
 	else {
 		context.lineWidth = "3";
 		context.strokeStyle = "rgb(255,255,255)";
+		leftTearsShown = false;
 	}
 	context.beginPath();
 		context.moveTo(125,180);
@@ -169,6 +167,36 @@ function getMouseXY(e) { //Steves stuff
 	var mx = Math.round(e.clientX-offsetX);
 	var my = Math.round(e.clientY-offsetY);
 	return {x: mx, y: my}; // return as an object
+}
+
+function drawMoustache(evt) {
+	var position = getMouseXY(evt);
+	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)){
+		/*red = Math.random()*255;
+		green = Math.random()*255;
+		blue = Math.random()*255;*/
+		var css = Math.random()*999999;
+		context.strokeStyle = "#css";
+		console.log("Whileloop");
+		context.beginPath();
+			context.moveTo(147,256);
+			//context.arc(200,360,95,3.7,5.7,false);
+			//context.arcTo(200,250,400,300,20);
+			context.arc(200,340,100,Math.PI+1,5.28,false);
+			context.closePath();
+			context.fill();
+		context.stroke();
+	}
+	else {
+		//strokestylewhite
+		clearCanvas();
+		drawFace();
+		drawNose();
+		if (leftTearsShown)
+			drawLeftTear();
+		if (rightTearsShown)
+			drawRightTear();
+	}
 }
 
 /*function followNose(x,y) {
