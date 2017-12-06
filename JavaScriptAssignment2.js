@@ -19,10 +19,10 @@ var green = 0;
 var blue = 0;
 var mouth = "n";
 
-happyButton.addEventListener("click", drawHappy);
-sadButton.addEventListener("click", drawSad);
-surprisedButton.addEventListener("click", drawSurprised);
-neutralButton.addEventListener("click", drawNeutral);
+happyButton.addEventListener("click", clickedHappy);
+sadButton.addEventListener("click", clickedSad);
+surprisedButton.addEventListener("click", clickedSurprised);
+neutralButton.addEventListener("click", clickedNeutral);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
 
@@ -116,6 +116,34 @@ function drawNeutral () {
 	context.stroke();
 }
 
+function clickedHappy(){
+	mouth = "h";
+	leftTearsShown = false;
+	rightTearsShown = false;
+	drawHappy();
+}
+
+function clickedSad() {
+	mouth = "sa";
+	leftTearsShown = false;
+	rightTearsShown = false;
+	drawSad();
+}
+
+function clickedSurprised() {
+	mouth = "su";
+	leftTearsShown = false;
+	rightTearsShown = false;
+	drawSurprised();
+}
+
+function clickedNeutral() {
+	mouth = "n";
+	leftTearsShown = false;
+	rightTearsShown = false;
+	drawNeutral();
+}
+
 function drawRightTear () {
 	if (rightEyeClicked == false) {
 		context.lineWidth = "2";
@@ -135,6 +163,7 @@ function drawRightTear () {
 		context.moveTo(240,215);
 		context.lineTo(240,235);
 	context.stroke();
+	rightEyeClicked = !(rightEyeClicked);
 }
 
 function drawLeftTear () {
@@ -156,6 +185,7 @@ function drawLeftTear () {
 		context.moveTo(140,215);
 		context.lineTo(140,235);
 	context.stroke();
+	leftEyeClicked = !(leftEyeClicked);
 }
 
 function getMouseXY(e) { //Steves stuff
@@ -187,27 +217,24 @@ function drawMoustache(evt) {
 		context.stroke();
 	}
 	else {
-		clearCanvas();
-		drawFace();
-		drawNose();
-		if (leftEyeClicked)
-			drawLeftTear();
-		if (rightEyeClicked)
-			drawRightTear();
 		switch(mouth) {
-	    case "n":
-	      drawNeutral();
-	      break;
-	    case "h":
-	      drawHappy();
-	      break;
-	    case "sa":
-	      drawSad();
+			case "n":
+				drawNeutral();
+				break;
+			case "h":
+				drawHappy();
+				break;
+			case "sa":
+				drawSad();
 				break;
 			case "su":
 				drawSurprised();
 				break;
 			}
+		if (leftTearsShown)
+			drawLeftTear();
+		if (rightTearsShown)
+			drawRightTear();
 		}
 	}
 
@@ -242,11 +269,9 @@ function callingStuffToDo (evt) {
 	console.log(position);
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
 			drawRightTear();
-			rightEyeClicked = !(rightEyeClicked);
 	}
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)) {
 			drawLeftTear();
-			leftEyeClicked = !(leftEyeClicked);
 	}
 			//if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
 			//followNose();
