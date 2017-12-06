@@ -17,6 +17,7 @@ sadButton.addEventListener('click', drawSad);
 surprisedButton.addEventListener('click', drawSurprised);
 neutralButton.addEventListener('click', drawNeutral);
 canvas.addEventListener('click', callingStuffToDo);
+canvas.addEventListener('mouseover', drawMoustache);
 
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
@@ -50,7 +51,18 @@ function drawFace() {
 		context.arc(245,150,7,0,Math.PI*2,true);
 		context.fill();
 	context.stroke();
+}
 
+function drawMoustache() {
+
+	context.beginPath();
+		context.moveTo(147,256);
+		//context.arc(200,360,95,3.7,5.7,false);
+		//context.arcTo(200,250,400,300,20);
+		context.arc(200,340,100,Math.PI+1,5.28,false);
+		context.closePath();
+		context.fill();
+	context.stroke();
 }
 
 function drawNose () {
