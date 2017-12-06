@@ -14,10 +14,7 @@ var noseClicked = false;
 var rightTearsShown = false;
 var leftTearsShown = false;
 
-var red = 0;
-var green = 0;
-var blue = 0;
-var mouth = "n";
+var mouth;
 
 happyButton.addEventListener("click", clickedHappy);
 sadButton.addEventListener("click", clickedSad);
@@ -28,6 +25,14 @@ canvas.addEventListener("mousemove", drawMoustache);
 
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
+}
+
+function clearLeftTears() {
+	context.clearRect(120,180,50,60);
+}
+
+function clearRightTears() {
+	context.clearRect(220,180,50,60);
 }
 
 function drawFace() {
@@ -149,20 +154,19 @@ function drawRightTear () {
 		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
 		rightTearsShown = true;
+		context.beginPath();
+			context.moveTo(225,180);
+			context.lineTo(225,200);
+			context.moveTo(260,200);
+			context.lineTo(260,220);
+			context.moveTo(240,215);
+			context.lineTo(240,235);
+		context.stroke();
 	}
 	else{
-		context.lineWidth = "3";
-		context.strokeStyle = "rgb(255,255,255)";
+		clearRightTears();
 		rightTearsShown = false;
 	}
-	context.beginPath();
-		context.moveTo(225,180);
-		context.lineTo(225,200);
-		context.moveTo(260,200);
-		context.lineTo(260,220);
-		context.moveTo(240,215);
-		context.lineTo(240,235);
-	context.stroke();
 	rightEyeClicked = !(rightEyeClicked);
 }
 
