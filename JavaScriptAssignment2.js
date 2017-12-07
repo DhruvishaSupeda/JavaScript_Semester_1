@@ -13,6 +13,7 @@ var leftEyeClicked = false;
 var noseClicked = false;
 var rightTearsShown = false;
 var leftTearsShown = false;
+var noseClicked = false;
 
 var mouth;
 
@@ -22,6 +23,8 @@ surprisedButton.addEventListener("click", clickedSurprised);
 neutralButton.addEventListener("click", clickedNeutral);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
+canvas.addEventListener("dblclick", grabNose);
+//canvas.addEventListener("mousedown", dropNose);
 
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
@@ -33,6 +36,10 @@ function clearLeftTears() {
 
 function clearRightTears() {
 	context.clearRect(220,180,50,60);
+}
+
+function clearNose() {
+	context.clearRect(180,190,30,40);
 }
 
 function drawFace() {
@@ -63,6 +70,29 @@ function drawFace() {
 		context.arc(245,150,7,0,Math.PI*2,true);
 		context.fill();
 	context.stroke();
+}
+
+function redrawFace() {
+	switch(mouth) {
+		case "n":
+			drawNeutral();
+			break;
+		case "h":
+			drawHappy();
+			break;
+		case "sa":
+			drawSad();
+			break;
+		case "su":
+			drawSurprised();
+			break;
+		}
+	if (leftTearsShown)
+		drawLeftTear();
+	if (rightTearsShown)
+		drawRightTear();
+	if (noseClicked)
+		clearNose();
 }
 
 function drawNose () {
@@ -125,6 +155,7 @@ function clickedHappy(){
 	mouth = "h";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	noseClicked = false;
 	drawHappy();
 }
 
@@ -132,6 +163,7 @@ function clickedSad() {
 	mouth = "sa";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	noseClicked = false;
 	drawSad();
 }
 
@@ -139,6 +171,7 @@ function clickedSurprised() {
 	mouth = "su";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	noseClicked = false;
 	drawSurprised();
 }
 
@@ -146,6 +179,7 @@ function clickedNeutral() {
 	mouth = "n";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	noseClicked = false;
 	drawNeutral();
 }
 
@@ -175,21 +209,28 @@ function drawLeftTear () {
 		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
 		leftTearsShown = true;
+		context.beginPath();
+			context.moveTo(125,180);
+			context.lineTo(125,200);
+			context.moveTo(160,200);
+			context.lineTo(160,220);
+			context.moveTo(140,215);
+			context.lineTo(140,235);
+		context.stroke();
 	}
 	else {
-		context.lineWidth = "3";
-		context.strokeStyle = "rgb(255,255,255)";
+		clearLeftTears();
 		leftTearsShown = false;
 	}
-	context.beginPath();
-		context.moveTo(125,180);
-		context.lineTo(125,200);
-		context.moveTo(160,200);
-		context.lineTo(160,220);
-		context.moveTo(140,215);
-		context.lineTo(140,235);
-	context.stroke();
 	leftEyeClicked = !(leftEyeClicked);
+}
+
+function animateLeftTears() {
+
+}
+
+function animateRightTears() {
+
 }
 
 function getMouseXY(e) { //Steves stuff
@@ -208,40 +249,58 @@ function getMouseXY(e) { //Steves stuff
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
-	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)){
-		context.strokeStyle = "#000000";
-		console.log("Whileloop");
-		context.beginPath();
-			context.moveTo(147,256);
-			//context.arc(200,360,95,3.7,5.7,false);
-			//context.arcTo(200,250,400,300,20);
-			context.arc(200,340,100,Math.PI+1,5.28,false);
-			context.closePath();
-			context.fill();
-		context.stroke();
-	}
+	context.beginPath();
+		context.moveTo(147,256);
+		//context.arc(200,360,95,3.7,5.7,false);
+		//context.arcTo(200,250,400,300,20);
+		context.arc(200,340,100,Math.PI+1,5.28,false);
+		context.closePath();
+		context.fill();
+	context.stroke();
+	/*}
 	else {
-		switch(mouth) {
-			case "n":
-				drawNeutral();
-				break;
-			case "h":
-				drawHappy();
-				break;
-			case "sa":
-				drawSad();
-				break;
-			case "su":
-				drawSurprised();
-				break;
-			}
-		if (leftTearsShown)
-			drawLeftTear();
-		if (rightTearsShown)
-			drawRightTear();
-		}
-	}
+		redrawFace();
+	}*/
+}
 
+function followNose() {
+
+}
+
+function grabNose(evt) {
+	//noseClicked = !(noseClicked);
+	var position = getMouseXY(evt);
+	//if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
+		//noseClicked = true;
+	//var x=position.x;
+	//var y=position.y;
+	//if (noseClicked == true) {
+		redrawFace();
+		clearNose();
+		context.beginPath();
+			context.moveTo(x,y-20); //200,195
+			context.lineTo(x-13,y+29); //224
+			context.lineTo(x,y+29);
+		context.stroke();
+	//}
+	requestAnimationFrame(grabNose);
+
+}
+
+function dropNose(evt) {
+	noseClicked = false;
+	redrawFace();
+}
+
+function checkMouse() {
+	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260))
+		drawMoustache();
+
+	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
+		grabNose();
+
+
+}
 
 /*function followNose(x,y) {
 	noseClicked = true;
@@ -261,12 +320,6 @@ function drawMoustache(evt) {
 	}
 }*/
 
-function followNose() {
-	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)) {
-
-	}
-
-}
 
 function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
@@ -277,9 +330,18 @@ function callingStuffToDo (evt) {
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)) {
 			drawLeftTear();
 	}
-			//if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
-			//followNose();
 }
+
+function checkingNose() {
+	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)){
+		noseClicked = true;
+		grabNose();
+	}
+	else {
+		dropNose();
+	}
+}
+
 
 //Main calling of functions for webpage first loads
 drawNeutral();
