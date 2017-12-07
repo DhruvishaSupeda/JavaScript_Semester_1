@@ -216,6 +216,7 @@ function drawMoustache(evt) {
 	var position = getMouseXY(evt);
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
 		console.log("Moustache");
+		context.strokeStyle = "rgb(0,0,0)";
 		context.beginPath();
 			context.moveTo(147,256);
 			context.arc(200,340,100,Math.PI+1,5.28,false);
@@ -233,7 +234,6 @@ function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
 	console.log(position);
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
-			y=150;
 			drawRightTear();
 	}
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
