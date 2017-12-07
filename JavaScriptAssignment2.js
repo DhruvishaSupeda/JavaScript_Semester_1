@@ -23,7 +23,7 @@ surprisedButton.addEventListener("click", clickedSurprised);
 neutralButton.addEventListener("click", clickedNeutral);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
-canvas.addEventListener("dblclick", grabNose);
+canvas.addEventListener("dblclick", checkingNose);
 //canvas.addEventListener("mousedown", dropNose);
 
 function clearCanvas() {
@@ -249,15 +249,8 @@ function getMouseXY(e) { //Steves stuff
 }
 
 function grabNose(evt) {
-	//noseClicked = !(noseClicked);
+	console.log("Stuff");
 	var position = getMouseXY(evt);
-	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
-	  noseClicked = true;
-	else {
-		noseClicked = false;
-		redrawFace();
-		drawNose();
-	}
 	var x=position.x;
 	var y=position.y;
 	if (noseClicked == true) {
@@ -269,67 +262,27 @@ function grabNose(evt) {
 			context.lineTo(x,y+29);
 		context.stroke();
 	}
-	//requestAnimationFrame(grabNose);
 
 }
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
-	context.beginPath();
-		context.moveTo(147,256);
-		//context.arc(200,360,95,3.7,5.7,false);
-		//context.arcTo(200,250,400,300,20);
-		context.arc(200,340,100,Math.PI+1,5.28,false);
-		context.closePath();
-		context.fill();
-	context.stroke();
+		context.beginPath();
+			context.moveTo(147,256);
+			context.arc(200,340,100,Math.PI+1,5.28,false);
+			context.closePath();
+			context.fill();
+		context.stroke();
 	}
 	else {
 		redrawFace();
+		drawNose();
+		console.log("Why no moustache");
+		if (noseClicked = true)
+			grabNose(evt);
 	}
-	if (noseClicked = true)
-		checkingNose(evt);
 }
-
-function noseClick() {
-
-}
-
-
-function dropNose(evt) {
-	noseClicked = false;
-	redrawFace();
-}
-
-function checkMouse() {
-	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260))
-		drawMoustache();
-
-	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
-		grabNose();
-
-
-}
-
-/*function followNose(x,y) {
-	noseClicked = true;
-	while (noseClicked == true) {
-		clearCanvas();
-		drawFace();
-		context.beginPath();
-			context.moveTo(x,y-20); //200,195
-			context.lineTo(x-13,y+29); //224
-			context.lineTo(x,y+29);
-		context.stroke();
-		position = getMouseXY(evt);
-		x=position.x;
-		y=position.y;
-		noseClicked = false;
-		//checkNoseClicked();
-	}
-}*/
-
 
 function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
@@ -343,22 +296,20 @@ function callingStuffToDo (evt) {
 }
 
 function checkingNose(evt) {
+	console.log("Checkigng");
 	var position = getMouseXY(evt);
 	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)){
 		noseClicked = true;
 		grabNose(evt);
 	}
 	else {
-		if (noseClicked==false) {
-			noseClicked = false;
-			redrawFace();
-			drawNose();
-		}
-		else
-			grabNose(evt);
+		noseClicked=false;
+		redrawFace();
+		drawNose();
+		console.log("noseiscancelled");
 	}
 }
 
 
-//Main calling of functions for webpage first loads
+//Main calling of functions for when webpage first loads
 drawNeutral();
