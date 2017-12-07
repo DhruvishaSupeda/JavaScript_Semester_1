@@ -185,7 +185,6 @@ function clickedNeutral() {
 
 function drawRightTear () {
 	if (rightEyeClicked == false) {
-		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
 		rightTearsShown = true;
 		context.beginPath();
@@ -196,6 +195,8 @@ function drawRightTear () {
 			context.moveTo(240,215);
 			context.lineTo(240,235);
 		context.stroke();
+		//needthis so everythign else isst drawn blue
+		context.strokeStyle = "rgb(0,0,0)";
 	}
 	else{
 		clearRightTears();
@@ -206,7 +207,6 @@ function drawRightTear () {
 
 function drawLeftTear () {
 	if (leftEyeClicked == false){
-		context.lineWidth = "2";
 		context.strokeStyle = "rgb(0,0,255)";
 		leftTearsShown = true;
 		context.beginPath();
@@ -217,6 +217,7 @@ function drawLeftTear () {
 			context.moveTo(140,215);
 			context.lineTo(140,235);
 		context.stroke();
+		context.strokeStyle = "rgb(0,0,0)";
 	}
 	else {
 		clearLeftTears();
@@ -250,8 +251,13 @@ function getMouseXY(e) { //Steves stuff
 function grabNose(evt) {
 	//noseClicked = !(noseClicked);
 	var position = getMouseXY(evt);
-	//if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
-	//noseClicked = true;
+	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225))
+	  noseClicked = true;
+	else {
+		noseClicked = false;
+		redrawFace();
+		drawNose();
+	}
 	var x=position.x;
 	var y=position.y;
 	if (noseClicked == true) {
@@ -286,7 +292,7 @@ function drawMoustache(evt) {
 		checkingNose(evt);
 }
 
-function followNose() {
+function noseClick() {
 
 }
 
@@ -343,7 +349,13 @@ function checkingNose(evt) {
 		grabNose(evt);
 	}
 	else {
-		//dropNose();
+		if (noseClicked==false) {
+			noseClicked = false;
+			redrawFace();
+			drawNose();
+		}
+		else
+			grabNose(evt);
 	}
 }
 
