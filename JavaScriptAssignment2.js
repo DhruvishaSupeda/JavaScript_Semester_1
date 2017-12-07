@@ -45,6 +45,7 @@ function clearNose() {
 function drawFace() {
 	rightEyeClicked = false;
 	leftEyeClicked = false;
+	noseClicked = false;
 
 	context.strokeStyle = "rgb(0,0,0)";
 	context.lineWidth = "3";
@@ -250,23 +251,26 @@ function getMouseXY(e) { //Steves stuff
 
 function grabNose(evt) {
 	console.log("Stuff");
+	drawMovingNose(evt);
+	}
+
+function drawMovingNose(evt) {
 	var position = getMouseXY(evt);
 	var x=position.x;
 	var y=position.y;
-	if (noseClicked == true) {
 		redrawFace();
 		clearNose();
 		context.beginPath();
 			context.moveTo(x,y-20); //200,195
-			context.lineTo(x-13,y+29); //224
-			context.lineTo(x,y+29);
+			context.lineTo(x-13,y+20); //224
+			context.lineTo(x,y+20);
 		context.stroke();
-	}
 
 }
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
+	noseClicked = false;
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
 		context.beginPath();
 			context.moveTo(147,256);
@@ -279,9 +283,11 @@ function drawMoustache(evt) {
 		redrawFace();
 		drawNose();
 		console.log("Why no moustache");
-		if (noseClicked = true)
+		if (noseClicked)
 			grabNose(evt);
 	}
+	if (noseClicked)
+		grabNose(evt);
 }
 
 function callingStuffToDo (evt) {
@@ -296,10 +302,10 @@ function callingStuffToDo (evt) {
 }
 
 function checkingNose(evt) {
-	console.log("Checkigng");
 	var position = getMouseXY(evt);
-	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)){
+	if (((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)) && !noseClicked){
 		noseClicked = true;
+		console.log("Checkigng");
 		grabNose(evt);
 	}
 	else {
@@ -307,7 +313,9 @@ function checkingNose(evt) {
 		redrawFace();
 		drawNose();
 		console.log("noseiscancelled");
+
 	}
+	//noseClicked = !noseClicked;
 }
 
 
