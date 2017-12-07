@@ -95,12 +95,12 @@ function redrawFace() {
 			break;
 		}
 	if (leftTearsShown)
-		drawLeftTear();
+		clearLeftTears();
 	if (rightTearsShown)
 		drawRightTear();
-	if (!noseClicked)
-		clearNose();
-		console.log("Clearing nose noseCLicked");
+	//if (noseClicked)
+		//clearNose();
+		//console.log("Clearing nose noseCLicked");
 }
 
 function drawNose () {
@@ -213,7 +213,7 @@ function drawRightTear () {
 	rightEyeClicked = !(rightEyeClicked);
 }
 
-function drawLeftTear () {
+/*function drawLeftTear () {
 	if (leftEyeClicked == false){
 		context.strokeStyle = "rgb(0,0,255)";
 		leftTearsShown = true;
@@ -232,7 +232,7 @@ function drawLeftTear () {
 		leftTearsShown = false;
 	}
 	leftEyeClicked = !(leftEyeClicked);
-}
+}*/
 
 function animateLeftTears() {
 
@@ -301,10 +301,10 @@ function callingStuffToDo (evt) {
 			y=150;
 			drawRightTear();
 	}
-	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175))
+	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
 			y=150;
 			startLeft();
-
+	}
 }
 
 function checkingNose(evt) {
@@ -336,7 +336,7 @@ function cancelNose() {
 ////////////////////////////////////////////////////ANIMATIONNNNN
 function drawLeft() {
 	context.strokeStyle = "rgb(0,0,255)";
-	leftTearsShown = true;
+	leftTearsShown = false;
 	context.beginPath();
 		context.moveTo(125,y);
 		context.lineTo(125,y+20);
@@ -346,7 +346,6 @@ function drawLeft() {
 		context.lineTo(140,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
-	leftEyeClicked = !(leftEyeClicked);
 }
 
 function clearLeft() {
@@ -355,7 +354,8 @@ function clearLeft() {
 }
 
 function updateLeft() {
-	y=y+20;
+	y=y+5;
+	clearLeft();
 }
 
 function nextFrameLeft() {
@@ -373,11 +373,14 @@ function nextFrameLeft() {
 function startLeft() {
 	var date = new Date();
 	startTime = date.getTime(); // get time when start button was pressed
+	y=150;
+	requestId = false;
 	drawLeft();
 	nextFrameLeft();
 }
 
 function stopLeft() {
+	clearLeft();
 	if (requestId)
 		cancelAnimationFrame(requestId);
 }
