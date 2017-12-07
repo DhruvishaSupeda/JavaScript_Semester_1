@@ -249,6 +249,7 @@ function getMouseXY(e) { //Steves stuff
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
+	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
 	context.beginPath();
 		context.moveTo(147,256);
 		//context.arc(200,360,95,3.7,5.7,false);
@@ -257,10 +258,10 @@ function drawMoustache(evt) {
 		context.closePath();
 		context.fill();
 	context.stroke();
-	/*}
+	}
 	else {
 		redrawFace();
-	}*/
+	}
 }
 
 function followNose() {
