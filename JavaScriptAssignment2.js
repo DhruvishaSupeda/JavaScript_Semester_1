@@ -26,6 +26,7 @@ surprisedButton.addEventListener("click", clickedSurprised);
 neutralButton.addEventListener("click", clickedNeutral);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
+canvas.addEventListener("dblclick", checkNose);
 
 
 function clearCanvas() {
@@ -89,7 +90,6 @@ function redrawFace() {
 		clearLeftTears();
 	if (rightTearsShown)
 		drawRightTear();
-
 }
 
 function drawNose () {
@@ -215,7 +215,6 @@ function getMouseXY(e) { //Steves stuff
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
-		console.log("Moustache");
 		context.strokeStyle = "rgb(0,0,0)";
 		context.beginPath();
 			context.moveTo(147,256);
@@ -223,10 +222,12 @@ function drawMoustache(evt) {
 			context.closePath();
 			context.fill();
 		context.stroke();
+		console.log("Moustache");
 	}
 	else {
 		redrawFace();
 		drawNose();
+		console.log("Not moustache");
 	}
 }
 
@@ -239,6 +240,13 @@ function callingStuffToDo (evt) {
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
 			y=150;
 			startLeft();
+	}
+}
+
+function checkNose(evt) {
+	var position = getMouseXY(evt);
+	if ((position.x >= 180 && position.x <= 200) && (position.y >= 190 && position.y <= 225)) {
+		clickedSurprised();
 	}
 }
 
@@ -272,7 +280,7 @@ function nextFrameLeft() {
 	updateLeft();
 	drawLeft();
 	if (y > 400) {
-			stop();
+			stopLeft();
 	}
 }
 
@@ -287,9 +295,6 @@ function stopLeft() {
 	clearLeft();
 	cancelAnimationFrame(requestId);
 }
-
-
-
 
 
 
