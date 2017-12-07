@@ -7,24 +7,30 @@ var happyButton = document.getElementById("happybutton");
 var sadButton = document.getElementById("sadbutton");
 var surprisedButton = document.getElementById("surprisedbutton");
 var neutralButton = document.getElementById("neutralbutton");
+var noseButton = document.getElementById("neutralbutton");
 
 var rightEyeClicked = false;
 var leftEyeClicked = false;
-var noseClicked = false;
 var rightTearsShown = false;
 var leftTearsShown = false;
 var noseClicked = false;
 
-var mouth;
+var y = 150;
+var mouth = "n";
+var requestId;
+var timePeriod = 2000; // 2 seconds
+var startTime;
+
 
 happyButton.addEventListener("click", clickedHappy);
 sadButton.addEventListener("click", clickedSad);
 surprisedButton.addEventListener("click", clickedSurprised);
 neutralButton.addEventListener("click", clickedNeutral);
+noseButton.addEventListener("click", cancelNose);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
 canvas.addEventListener("dblclick", checkingNose);
-//canvas.addEventListener("mousedown", dropNose);
+
 
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
@@ -92,8 +98,9 @@ function redrawFace() {
 		drawLeftTear();
 	if (rightTearsShown)
 		drawRightTear();
-	if (noseClicked)
+	if (!noseClicked)
 		clearNose();
+		console.log("Clearing nose noseCLicked");
 }
 
 function drawNose () {
@@ -250,9 +257,9 @@ function getMouseXY(e) { //Steves stuff
 }
 
 function grabNose(evt) {
-	console.log("Stuff");
+	console.log("grabbing nose");
 	drawMovingNose(evt);
-	}
+}
 
 function drawMovingNose(evt) {
 	var position = getMouseXY(evt);
@@ -265,12 +272,13 @@ function drawMovingNose(evt) {
 			context.lineTo(x-13,y+20); //224
 			context.lineTo(x,y+20);
 		context.stroke();
+		console.log("drew nose");
 
 }
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
-	noseClicked = false;
+	noseClicked = true;
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
 		context.beginPath();
 			context.moveTo(147,256);
@@ -281,42 +289,102 @@ function drawMoustache(evt) {
 	}
 	else {
 		redrawFace();
-		drawNose();
-		console.log("Why no moustache");
-		if (noseClicked)
-			grabNose(evt);
+		if (!noseClicked)
+			drawNose();
 	}
-	if (noseClicked)
-		grabNose(evt);
 }
 
 function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
 	console.log(position);
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
+			y=150;
 			drawRightTear();
 	}
-	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)) {
-			drawLeftTear();
-	}
+	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175))
+			y=150;
+			startLeft();
+
 }
 
 function checkingNose(evt) {
 	var position = getMouseXY(evt);
-	if (((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)) && !noseClicked){
+	if ((position.x>=180 && position.x<=200) && (position.y>=200 && position.y<=225)) {
 		noseClicked = true;
+		console.log(noseClicked);
 		console.log("Checkigng");
 		grabNose(evt);
 	}
 	else {
-		noseClicked=false;
-		redrawFace();
-		drawNose();
-		console.log("noseiscancelled");
-
+		if (!noseClicked) {
+			grabNose();
+			noseClicked = true;
+		}
+		else
+			noseClicked = false;
+			console.log(noseClicked + "checking");
 	}
-	//noseClicked = !noseClicked;
 }
+
+function cancelNose() {
+	noseClicked = false;
+	console.log(noseClicked + "cancel");
+}
+
+
+
+////////////////////////////////////////////////////ANIMATIONNNNN
+function drawLeft() {
+	context.strokeStyle = "rgb(0,0,255)";
+	leftTearsShown = true;
+	context.beginPath();
+		context.moveTo(125,y);
+		context.lineTo(125,y+20);
+		context.moveTo(160,y+20);
+		context.lineTo(160,y+40);
+		context.moveTo(140,y+45);
+		context.lineTo(140,y+65);
+	context.stroke();
+	context.strokeStyle = "rgb(0,0,0)";
+	leftEyeClicked = !(leftEyeClicked);
+}
+
+function clearLeft() {
+	clearCanvas();
+	redrawFace();
+}
+
+function updateLeft() {
+	y=y+20;
+}
+
+function nextFrameLeft() {
+	requestId = requestAnimationFrame(nextFrameLeft);
+	updateLeft();
+	drawLeft();
+	var date = new Date();
+	var now = date.getTime();
+	//displayTime(now-startTime);
+	if (now-startTime > timePeriod) {
+			stop();
+	}
+}
+
+function startLeft() {
+	var date = new Date();
+	startTime = date.getTime(); // get time when start button was pressed
+	drawLeft();
+	nextFrameLeft();
+}
+
+function stopLeft() {
+	if (requestId)
+		cancelAnimationFrame(requestId);
+}
+
+
+
+
 
 
 //Main calling of functions for when webpage first loads
