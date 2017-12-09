@@ -18,6 +18,11 @@ var mouth = "n";
 var requestId;
 var timePeriod = 2000; // 2 seconds
 var startTime;
+var faceCentre = 200; //make constant
+var faceRadius = 150 //make constant
+var heartsDrawnX = 0;
+var heartsDrawnY = 1;
+var heartsDrawn = [];
 
 
 happyButton.addEventListener("click", clickedHappy);
@@ -49,10 +54,12 @@ function drawFace() {
 	context.lineWidth = "3";
 
 	context.beginPath();
-		context.arc(200,200,150,0,Math.PI*2,true);
+		context.arc(faceCentre,faceCentre,150,0,Math.PI*2,true);
 		context.moveTo(175,150);
+		//left eye
 		context.arc(150,150,25,0,Math.PI*2,true);
 		context.moveTo(270,150);
+		//right eye
 		context.arc(245,150,25,0,Math.PI*2,true);
 	context.stroke();
 
@@ -90,6 +97,10 @@ function redrawFace() {
 		clearLeftTears();
 	if (rightTearsShown)
 		drawRightTear();
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+		console.log(heartsDrawn[i]);
+	}
 }
 
 function drawNose () {
@@ -152,6 +163,9 @@ function clickedHappy(){
 	mouth = "h";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	heartsDrawn = [];
+	var heartsDrawnX = 0;
+	var heartsDrawnY = 1;
 	drawHappy();
 }
 
@@ -159,6 +173,9 @@ function clickedSad() {
 	mouth = "sa";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	heartsDrawn = [];
+	var heartsDrawnX = 0;
+	var heartsDrawnY = 1;
 	drawSad();
 }
 
@@ -166,6 +183,9 @@ function clickedSurprised() {
 	mouth = "su";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	heartsDrawn = [];
+	var heartsDrawnX = 0;
+	var heartsDrawnY = 1;
 	drawSurprised();
 }
 
@@ -173,6 +193,9 @@ function clickedNeutral() {
 	mouth = "n";
 	leftTearsShown = false;
 	rightTearsShown = false;
+	heartsDrawn = [];
+	var heartsDrawnX = 0;
+	var heartsDrawnY = 1;
 	drawNeutral();
 }
 
@@ -230,15 +253,39 @@ function drawMoustache(evt) {
 	}
 }
 
+function drawHeart(evt, context) {
+	var position = getMouseXY(evt);
+	var img = new Image();
+	img.onload = function() {
+		context.drawImage(img,position.x,position.y);
+	}
+	img.src = "heart_picture.png";
+	heartsDrawn[heartsDrawnX] = position.x;
+	heartsDrawn[heartsDrawnY] = position.y;
+	heartsDrawnX += 2;
+	heartsDrawnY += 2;
+}
+
+function redrawHeart(x,y) {
+	var img = new Image();
+	img.onload = function() {
+		context.drawImage(img,x,y);
+	}
+	img.src = "heart_picture.png";
+}
+
 function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
 	console.log(position);
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
 			startRight();
 	}
-	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
+	else if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
 			y=150;
 			startLeft();
+	}
+	else if (Math.sqrt(Math.pow(position.x-faceCentre,2)+Math.pow(position.y-faceCentre,2)) <= faceRadius-10) {
+		drawHeart(evt,context);
 	}
 }
 
