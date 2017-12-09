@@ -226,7 +226,6 @@ function drawMoustache(evt) {
 	}
 	else {
 		redrawFace();
-		drawNose();
 		console.log("Not moustache");
 	}
 }
@@ -235,7 +234,7 @@ function callingStuffToDo (evt) {
 	var position = getMouseXY(evt);
 	console.log(position);
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
-			drawRightTear();
+			startRight();
 	}
 	if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
 			y=150;
@@ -250,7 +249,7 @@ function checkNose(evt) {
 	}
 }
 
-////////////////////////////////////////////////////ANIMATIONNNNN
+////////////////////////////////////////////////////ANIMATIONNNNN LEFT
 function drawLeft() {
 	context.strokeStyle = "rgb(0,0,255)";
 	leftTearsShown = false;
@@ -293,6 +292,52 @@ function startLeft() {
 
 function stopLeft() {
 	clearLeft();
+	cancelAnimationFrame(requestId);
+}
+
+/////////////////////////ANIMATION right
+function drawRight() {
+	context.strokeStyle = "rgb(0,0,255)";
+	rightTearsShown = false;
+	context.beginPath();
+		context.moveTo(225,y);
+		context.lineTo(225,y+20);
+		context.moveTo(260,y+20);
+		context.lineTo(260,y+40);
+		context.moveTo(240,y+45);
+		context.lineTo(240,y+65);
+	context.stroke();
+	context.strokeStyle = "rgb(0,0,0)";
+}
+
+function clearRight() {
+	clearCanvas();
+	redrawFace();
+}
+
+function updateRight() {
+	y=y+5;
+	clearRight();
+}
+
+function nextFrameRight() {
+	requestId = requestAnimationFrame(nextFrameRight);
+	updateRight();
+	drawRight();
+	if (y > 400) {
+			stopRight();
+	}
+}
+
+function startRight() {
+	console.log("starting animation");
+	y=150;
+	drawRight();
+	nextFrameRight();
+}
+
+function stopRight() {
+	clearRight();
 	cancelAnimationFrame(requestId);
 }
 
