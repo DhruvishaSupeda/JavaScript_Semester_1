@@ -17,8 +17,7 @@ var heartsDrawn = [];
 var moustacheDrawn = false;
 
 const faceCentre = 200;
-const faceRadius = 150 
-
+const faceRadius = 150
 
 happyButton.addEventListener("click", drawHappy);
 sadButton.addEventListener("click", drawSad);
