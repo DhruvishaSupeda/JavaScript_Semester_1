@@ -10,11 +10,6 @@ var sadButton = document.getElementById("sadbutton");
 var surprisedButton = document.getElementById("surprisedbutton");
 var neutralButton = document.getElementById("neutralbutton");
 
-var rightEyeClicked = false;
-var leftEyeClicked = false;
-var rightTearsShown = false;
-var leftTearsShown = false;
-
 var y = 150;
 var mouth = "n";
 var requestId;
@@ -27,7 +22,7 @@ happyButton.addEventListener("click", drawHappy);
 sadButton.addEventListener("click", drawSad);
 surprisedButton.addEventListener("click", drawSurprised);
 neutralButton.addEventListener("click", drawNeutral);
-canvas.addEventListener("click", callingStuffToDo);
+canvas.addEventListener("click", clickedCanvas);
 canvas.addEventListener("mousemove", drawMoustache);
 canvas.addEventListener("dblclick", checkNose);
 
@@ -36,11 +31,12 @@ function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
+//Clears the moustache
 function clearMoustache() {
 	context.clearRect(130,230,135,28)
 }
 
-//Redraws all of the hearts already on the screen
+//Redraws a heart at coordinates (x,y) passed into the function
 function redrawHeart(x,y) {
 	var img = new Image();
 	img.onload = function() {
@@ -52,7 +48,6 @@ function redrawHeart(x,y) {
 function drawFace() {
 	context.strokeStyle = "rgb(0,0,0)";
 	context.lineWidth = "3";
-	heartsDrawn = [];
 
 	context.beginPath();
 		//draws the face outline
@@ -104,6 +99,7 @@ function redrawFace() {
 			break;
 		}
 
+	//Draws all of the hearts at the coordinates stored in the array
 	for (i = 0; i < heartsDrawn.length; i+=2) {
 		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
 	}
@@ -111,8 +107,9 @@ function redrawFace() {
 
 
 function drawHappy () {
-	//happy face
+	//Draws the happy face
 	mouth = "h";
+	heartsDrawn = [];
 	clearCanvas();
 	drawFace();
 	context.beginPath();
@@ -122,8 +119,9 @@ function drawHappy () {
 }
 
 function drawSad () {
-	//sad face
+	//Draws the sad face
 	mouth = "sa";
+	heartsDrawn = [];
 	clearCanvas();
 	drawFace();
 	context.beginPath();
@@ -133,8 +131,9 @@ function drawSad () {
 }
 
 function drawSurprised () {
-	//surprised face
+	//Draws the surprised face
 	mouth = "su";
+	heartsDrawn = [];
 	clearCanvas();
 	drawFace();
 	context.beginPath();
@@ -144,8 +143,9 @@ function drawSurprised () {
 }
 
 function drawNeutral () {
-	//neutral face
+	//Draws the neutral face
 	mouth ="n";
+	heartsDrawn = [];
 	clearCanvas();
 	drawFace();
 	context.beginPath();
@@ -155,7 +155,7 @@ function drawNeutral () {
 }
 
 
-function getMouseXY(e) { //Steves stuff
+function getMouseXY(e) {
 	var boundingRect = canvas.getBoundingClientRect();
 	var offsetX = boundingRect.left;
 	var offsetY = boundingRect.top;
@@ -171,6 +171,7 @@ function getMouseXY(e) { //Steves stuff
 
 function drawMoustache(evt) {
 	var position = getMouseXY(evt);
+	//If the mouse is over the moustache position, draws the moustache
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
 		context.strokeStyle = "rgb(0,0,0)";
 		context.beginPath();
@@ -181,14 +182,16 @@ function drawMoustache(evt) {
 		context.stroke();
 	}
 	else {
+		//If moustache not drawn, it is cleared and the hearts are redrawn on the face
 		clearMoustache();
-		for (i = 0; i < heartsDrawn.length; i+=2) {
-			redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
-		}
+	}
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
 	}
 }
 
-function drawHeart(evt, context) {
+//Draws a heart at the mouse position
+function drawHeart(evt) {
 	var position = getMouseXY(evt);
 	var img = new Image();
 	img.onload = function() {
@@ -197,25 +200,30 @@ function drawHeart(evt, context) {
 	img.src = "heart_picture.png";
 }
 
-function callingStuffToDo (evt) {
+function clickedCanvas (evt) {
 	var position = getMouseXY(evt);
-	console.log(position);
+	//If the user clicks the right eye, starts the right eye tear animation
 	if ((position.x >= 220 && position.x <= 270) && (position.y >= 124 && position.y <= 175)) {
 			startRight();
 	}
+	//If the user clicks the left eye, starts the left eye tear animation
 	else if ((position.x >= 120 && position.x <= 170) && (position.y >= 124 && position.y <= 175)){
 			y=150;
 			startLeft();
 	}
+	//If the face is clicked (but not on the eyes or nose) a heart is drawn
 	else if (Math.sqrt(Math.pow(position.x-faceCentre,2)+Math.pow(position.y-faceCentre,2)) <= faceRadius-10) {
-		drawHeart(evt,context);
-		heartsDrawn.push(position.x);
-		heartsDrawn.push(position.y);
+		if ((position.x <= 180 || position.x >= 200) && (position.y <= 190 || position.y >= 225))
+			drawHeart(evt,context);
+			//Position of heart added to the array so it can be redrawn
+			heartsDrawn.push(position.x);
+			heartsDrawn.push(position.y);
 	}
 }
 
 function checkNose(evt) {
 	var position = getMouseXY(evt);
+	//If the nose is double clicked, the surprised face is shown
 	if ((position.x >= 180 && position.x <= 200) && (position.y >= 190 && position.y <= 225)) {
 		drawSurprised();
 	}
@@ -224,7 +232,6 @@ function checkNose(evt) {
 ////////////////////////////////////////////////////ANIMATION LEFT
 function drawLeft() {
 	context.strokeStyle = "rgb(0,0,255)";
-	leftTearsShown = false;
 	context.beginPath();
 		context.moveTo(125,y);
 		context.lineTo(125,y+20);
@@ -234,16 +241,10 @@ function drawLeft() {
 		context.lineTo(140,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
-	for (i = 0; i < heartsDrawn.length; i+=2) {
-		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
-	}
 }
 
 function clearLeft() {
 	clearCanvas();
-	for (i = 0; i < heartsDrawn.length; i+=2) {
-		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
-	}
 	redrawFace();
 }
 
@@ -276,7 +277,6 @@ function stopLeft() {
 /////////////////////////ANIMATION right
 function drawRight() {
 	context.strokeStyle = "rgb(0,0,255)";
-	rightTearsShown = false;
 	context.beginPath();
 		context.moveTo(225,y);
 		context.lineTo(225,y+20);
@@ -286,9 +286,6 @@ function drawRight() {
 		context.lineTo(240,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
-	for (i = 0; i < heartsDrawn.length; i+=2) {
-		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
-	}
 }
 
 function clearRight() {
