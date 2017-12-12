@@ -1,3 +1,5 @@
+//Author: Dhruvisha Supeda
+
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 const WIDTH = canvas.width;
@@ -16,69 +18,77 @@ var leftTearsShown = false;
 var y = 150;
 var mouth = "n";
 var requestId;
-var timePeriod = 2000; // 2 seconds
-var startTime;
 var faceCentre = 200; //make constant
 var faceRadius = 150 //make constant
-var heartsDrawnX = 0;
-var heartsDrawnY = 1;
 var heartsDrawn = [];
 
 
-happyButton.addEventListener("click", clickedHappy);
-sadButton.addEventListener("click", clickedSad);
-surprisedButton.addEventListener("click", clickedSurprised);
-neutralButton.addEventListener("click", clickedNeutral);
+happyButton.addEventListener("click", drawHappy);
+sadButton.addEventListener("click", drawSad);
+surprisedButton.addEventListener("click", drawSurprised);
+neutralButton.addEventListener("click", drawNeutral);
 canvas.addEventListener("click", callingStuffToDo);
 canvas.addEventListener("mousemove", drawMoustache);
 canvas.addEventListener("dblclick", checkNose);
 
-
+//Clears the entire canvas
 function clearCanvas() {
 	context.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
-function clearLeftTears() {
-	context.clearRect(120,180,50,60);
+function clearMoustache() {
+	context.clearRect(130,230,135,28)
 }
 
-function clearRightTears() {
-	context.clearRect(220,180,50,60);
+//Redraws all of the hearts already on the screen
+function redrawHeart(x,y) {
+	var img = new Image();
+	img.onload = function() {
+		context.drawImage(img,x,y);
+	}
+	img.src = "heart_picture.png";
 }
 
 function drawFace() {
-	rightEyeClicked = false;
-	leftEyeClicked = false;
-
 	context.strokeStyle = "rgb(0,0,0)";
 	context.lineWidth = "3";
+	heartsDrawn = [];
 
 	context.beginPath();
+		//draws the face outline
 		context.arc(faceCentre,faceCentre,150,0,Math.PI*2,true);
 		context.moveTo(175,150);
-		//left eye
+		//draws the left eye outline
 		context.arc(150,150,25,0,Math.PI*2,true);
 		context.moveTo(270,150);
-		//right eye
+		//draws the right eye outline
 		context.arc(245,150,25,0,Math.PI*2,true);
 	context.stroke();
 
-	//inside of eye on left
+	//draws the pupil of the left eye
 	context.beginPath();
 		context.moveTo(157,150);
 		context.arc(150,150,7,0,Math.PI*2,true);
 		context.fill();
 	context.stroke();
 
-	//inside of eye on right
+	//draws the pupil of the right eye
 	context.beginPath();
 		context.moveTo(252,150);
 		context.arc(245,150,7,0,Math.PI*2,true);
 		context.fill();
 	context.stroke();
+
+	//draws the nose on the face
+	context.beginPath();
+		context.moveTo(200,195);
+		context.lineTo(187,224);
+		context.lineTo(200,224);
+	context.stroke();
 }
 
 function redrawFace() {
+	//switch case for each type of face to be drawn
 	switch(mouth) {
 		case "n":
 			drawNeutral();
@@ -93,30 +103,18 @@ function redrawFace() {
 			drawSurprised();
 			break;
 		}
-	if (leftTearsShown)
-		clearLeftTears();
-	if (rightTearsShown)
-		drawRightTear();
+
 	for (i = 0; i < heartsDrawn.length; i+=2) {
 		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
-		console.log(heartsDrawn[i]);
 	}
 }
 
-function drawNose () {
-	context.beginPath();
-		context.moveTo(200,195);
-		context.lineTo(187,224);
-		context.lineTo(200,224);
-	context.stroke();
-}
 
 function drawHappy () {
 	//happy face
 	mouth = "h";
 	clearCanvas();
 	drawFace();
-	drawNose();
 	context.beginPath();
 		context.moveTo(287,268);
 		context.arc(200,220,100,0.5,2.65,false);
@@ -128,7 +126,6 @@ function drawSad () {
 	mouth = "sa";
 	clearCanvas();
 	drawFace();
-	drawNose();
 	context.beginPath();
 		context.moveTo(120,310);
 		context.arc(200,360,95,3.7,5.7,false);
@@ -140,7 +137,6 @@ function drawSurprised () {
 	mouth = "su";
 	clearCanvas();
 	drawFace();
-	drawNose();
 	context.beginPath();
 		context.moveTo(230,290);
 		context.arc(200,290,30,0,Math.PI*2,true);
@@ -152,74 +148,12 @@ function drawNeutral () {
 	mouth ="n";
 	clearCanvas();
 	drawFace();
-	drawNose();
 	context.beginPath();
 		context.moveTo(120,270);
 		context.lineTo(280,270);
 	context.stroke();
 }
 
-function clickedHappy(){
-	mouth = "h";
-	leftTearsShown = false;
-	rightTearsShown = false;
-	heartsDrawn = [];
-	var heartsDrawnX = 0;
-	var heartsDrawnY = 1;
-	drawHappy();
-}
-
-function clickedSad() {
-	mouth = "sa";
-	leftTearsShown = false;
-	rightTearsShown = false;
-	heartsDrawn = [];
-	var heartsDrawnX = 0;
-	var heartsDrawnY = 1;
-	drawSad();
-}
-
-function clickedSurprised() {
-	mouth = "su";
-	leftTearsShown = false;
-	rightTearsShown = false;
-	heartsDrawn = [];
-	var heartsDrawnX = 0;
-	var heartsDrawnY = 1;
-	drawSurprised();
-}
-
-function clickedNeutral() {
-	mouth = "n";
-	leftTearsShown = false;
-	rightTearsShown = false;
-	heartsDrawn = [];
-	var heartsDrawnX = 0;
-	var heartsDrawnY = 1;
-	drawNeutral();
-}
-
-function drawRightTear () {
-	if (rightEyeClicked == false) {
-		context.strokeStyle = "rgb(0,0,255)";
-		rightTearsShown = true;
-		context.beginPath();
-			context.moveTo(225,180);
-			context.lineTo(225,200);
-			context.moveTo(260,200);
-			context.lineTo(260,220);
-			context.moveTo(240,215);
-			context.lineTo(240,235);
-		context.stroke();
-		//needthis so everythign else isst drawn blue
-		context.strokeStyle = "rgb(0,0,0)";
-	}
-	else{
-		clearRightTears();
-		rightTearsShown = false;
-	}
-	rightEyeClicked = !(rightEyeClicked);
-}
 
 function getMouseXY(e) { //Steves stuff
 	var boundingRect = canvas.getBoundingClientRect();
@@ -245,11 +179,12 @@ function drawMoustache(evt) {
 			context.closePath();
 			context.fill();
 		context.stroke();
-		console.log("Moustache");
 	}
 	else {
-		redrawFace();
-		console.log("Not moustache");
+		clearMoustache();
+		for (i = 0; i < heartsDrawn.length; i+=2) {
+			redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+		}
 	}
 }
 
@@ -258,18 +193,6 @@ function drawHeart(evt, context) {
 	var img = new Image();
 	img.onload = function() {
 		context.drawImage(img,position.x,position.y);
-	}
-	img.src = "heart_picture.png";
-	heartsDrawn[heartsDrawnX] = position.x;
-	heartsDrawn[heartsDrawnY] = position.y;
-	heartsDrawnX += 2;
-	heartsDrawnY += 2;
-}
-
-function redrawHeart(x,y) {
-	var img = new Image();
-	img.onload = function() {
-		context.drawImage(img,x,y);
 	}
 	img.src = "heart_picture.png";
 }
@@ -286,17 +209,19 @@ function callingStuffToDo (evt) {
 	}
 	else if (Math.sqrt(Math.pow(position.x-faceCentre,2)+Math.pow(position.y-faceCentre,2)) <= faceRadius-10) {
 		drawHeart(evt,context);
+		heartsDrawn.push(position.x);
+		heartsDrawn.push(position.y);
 	}
 }
 
 function checkNose(evt) {
 	var position = getMouseXY(evt);
 	if ((position.x >= 180 && position.x <= 200) && (position.y >= 190 && position.y <= 225)) {
-		clickedSurprised();
+		drawSurprised();
 	}
 }
 
-////////////////////////////////////////////////////ANIMATIONNNNN LEFT
+////////////////////////////////////////////////////ANIMATION LEFT
 function drawLeft() {
 	context.strokeStyle = "rgb(0,0,255)";
 	leftTearsShown = false;
@@ -309,10 +234,16 @@ function drawLeft() {
 		context.lineTo(140,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+	}
 }
 
 function clearLeft() {
 	clearCanvas();
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+	}
 	redrawFace();
 }
 
@@ -338,8 +269,8 @@ function startLeft() {
 }
 
 function stopLeft() {
-	clearLeft();
 	cancelAnimationFrame(requestId);
+	clearLeft();
 }
 
 /////////////////////////ANIMATION right
@@ -355,11 +286,17 @@ function drawRight() {
 		context.lineTo(240,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+	}
 }
 
 function clearRight() {
 	clearCanvas();
 	redrawFace();
+	for (i = 0; i < heartsDrawn.length; i+=2) {
+		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
+	}
 }
 
 function updateRight() {
