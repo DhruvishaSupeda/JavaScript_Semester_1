@@ -13,10 +13,11 @@ var neutralButton = document.getElementById("neutralbutton");
 var y = 150;
 var mouth = "n";
 var requestId;
-var faceCentre = 200; //make constant
-var faceRadius = 150 //make constant
 var heartsDrawn = [];
 var moustacheDrawn = false;
+
+const faceCentre = 200;
+const faceRadius = 150 
 
 
 happyButton.addEventListener("click", drawHappy);
