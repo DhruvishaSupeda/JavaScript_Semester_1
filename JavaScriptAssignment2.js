@@ -229,7 +229,7 @@ function checkNose(evt) {
 	}
 }
 
-////////////////////////////////////////////////////ANIMATION LEFT
+//Animation for the left eye
 function drawLeft() {
 	context.strokeStyle = "rgb(0,0,255)";
 	context.beginPath();
@@ -241,6 +241,7 @@ function drawLeft() {
 		context.lineTo(140,y+65);
 	context.stroke();
 	context.strokeStyle = "rgb(0,0,0)";
+	//drawMoustache();
 }
 
 function clearLeft() {
