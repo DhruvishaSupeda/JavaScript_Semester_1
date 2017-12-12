@@ -16,6 +16,7 @@ var requestId;
 var faceCentre = 200; //make constant
 var faceRadius = 150 //make constant
 var heartsDrawn = [];
+var moustacheDrawn = false;
 
 
 happyButton.addEventListener("click", drawHappy);
@@ -173,6 +174,7 @@ function drawMoustache(evt) {
 	var position = getMouseXY(evt);
 	//If the mouse is over the moustache position, draws the moustache
 	if ((position.x>=147 && position.x<=260) && (position.y>=230 && position.y<=260)) {
+		moustacheDrawn = true;
 		context.strokeStyle = "rgb(0,0,0)";
 		context.beginPath();
 			context.moveTo(147,256);
@@ -180,10 +182,14 @@ function drawMoustache(evt) {
 			context.closePath();
 			context.fill();
 		context.stroke();
+
 	}
 	else {
 		//If moustache not drawn, it is cleared and the hearts are redrawn on the face
-		clearMoustache();
+		if (moustacheDrawn == true) {
+			clearMoustache();
+			moustacheDrawn = false;
+		}
 	}
 	for (i = 0; i < heartsDrawn.length; i+=2) {
 		redrawHeart(heartsDrawn[i], heartsDrawn[i+1]);
